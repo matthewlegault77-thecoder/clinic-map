@@ -1,0 +1,254 @@
+/* Calgary Clinic Outreach & Territory Map - Stylesheet */
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #0284c7;
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --slate-50: #f8fafc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--slate-900);
+  background-color: var(--slate-50);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Map Markers */
+.clinic-pin-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clinic-pin {
+  width: 34px;
+  height: 34px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  border: 2px solid #ffffff;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.clinic-pin-inner {
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.clinic-pin:hover {
+  transform: rotate(-45deg) scale(1.18);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+  z-index: 1000 !important;
+}
+
+/* Pin Status Colors */
+.pin-to_call {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}
+.pin-in_talks {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+}
+.pin-interested {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+.pin-using_app {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+.pin-not_interested {
+  background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+}
+
+/* Pulsing radar for clinics actively using app */
+.pulse-ring {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: radar-pulse 2.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+  border: 2.5px solid #10b981;
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.9;
+  }
+  65% {
+    transform: scale(1.4);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+/* Customer Count Tag on Map Pin */
+.pin-customer-tag {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #0f172a;
+  color: #38bdf8;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+/* Leaflet Popup Styling */
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.25) !important;
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+  width: 280px !important;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  top: 8px !important;
+  right: 8px !important;
+  color: #64748b !important;
+  padding: 4px !important;
+  font-size: 16px !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 9999px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Slide-out Clinic Dossier Bar */
+#clinicDossier {
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  box-shadow: -10px 0 35px rgba(15, 23, 42, 0.15);
+}
+
+#clinicDossier.translate-x-full {
+  transform: translateX(100%);
+  pointer-events: none;
+}
+#clinicDossier:not(.translate-x-full) {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Quadrant Pill Badges */
+.badge-quadrant-nw {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.badge-quadrant-ne {
+  background-color: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+.badge-quadrant-sw {
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+.badge-quadrant-se {
+  background-color: #f3e8ff;
+  color: #7e22ce;
+  border: 1px solid #e9d5ff;
+}
+
+/* Status Badges */
+.badge-status-to_call {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+.badge-status-in_talks {
+  background-color: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+.badge-status-interested {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+.badge-status-using_app {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+.badge-status-not_interested {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+/* Toast Notification */
+#toast {
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card Selection */
+.clinic-card-selected {
+  border-color: #3b82f6 !important;
+  background-color: #eff6ff !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+}
+
+.pin-drop-mode {
+  cursor: crosshair !important;
+}
