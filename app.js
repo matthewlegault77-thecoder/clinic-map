@@ -120,6 +120,9 @@
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         clinics = JSON.parse(stored);
+        // Drop clinics removed from the dataset as nonexistent, unless the user already logged something on them
+        const REMOVED_IDS = ['nw-05', 'ne-09', 'sw-07', 'se-02', 'se-08'];
+        clinics = clinics.filter(c => !(REMOVED_IDS.includes(c.id) && c.status === 'to_call' && !c.notes));
         // Backfill emails added to the dataset after this browser first saved
         INITIAL_CLINICS.forEach(init => {
           const c = clinics.find(c => c.id === init.id);
@@ -921,14 +924,14 @@
   }
 
   function resetDefaultData() {
-    if (confirm('Reset to the initial clean list of 39 clinics (all status set to To Call)?')) {
+    if (confirm(`Reset to the initial clean list of ${INITIAL_CLINICS.length} clinics (all status set to To Call)?`)) {
       clinics = getInitialClinics();
       saveData();
       selectedClinicId = null;
       closeClinicDossier();
       updateUI();
       closeExportImportModal();
-      showToast('Reset to clean 39 Calgary clinics.', 'info');
+      showToast(`Reset to clean ${INITIAL_CLINICS.length} Calgary clinics.`, 'info');
     }
   }
 
