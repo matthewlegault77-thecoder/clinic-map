@@ -121,13 +121,18 @@
       if (stored) {
         clinics = JSON.parse(stored);
         // Drop clinics removed from the dataset as nonexistent, unless the user already logged something on them
-        const REMOVED_IDS = ['nw-05', 'ne-09', 'sw-07', 'se-02', 'se-08'];
+        const REMOVED_IDS = ['nw-05', 'ne-09', 'sw-07', 'se-02', 'se-08', 'sw-03'];
         clinics = clinics.filter(c => !(REMOVED_IDS.includes(c.id) && c.status === 'to_call' && !c.notes));
-        // Backfill emails added to the dataset after this browser first saved
+        // Apply dataset corrections to contact fields the user left blank or never edited
         INITIAL_CLINICS.forEach(init => {
           const c = clinics.find(c => c.id === init.id);
-          if (c && !c.email && init.email) c.email = init.email;
+          if (!c) return;
+          const prev = PREVIOUS_CONTACT_VALUES[init.id] || {};
+          ['name', 'quadrant', 'address', 'lat', 'lng', 'phone', 'email'].forEach(f => {
+            if (!c[f] || c[f] === prev[f]) c[f] = init[f];
+          });
         });
+        saveData();
       } else {
         clinics = getInitialClinics();
         saveData();

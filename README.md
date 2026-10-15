@@ -2,7 +2,7 @@
 
 A clean territory management and cold-calling dashboard for your clinic connectivity app.
 
-This map pins **34 physiotherapy clinics** across **North-West (NW), North-East (NE), South-West (SW), and South-East (SE) Calgary**, loaded with street addresses, phone numbers, and coordinates.
+This map pins **33 physiotherapy clinics** across **North-West (NW), North-East (NE), South-West (SW), and South-East (SE) Calgary**, with addresses, phone numbers and emails checked against each clinic's own website.
 
 ---
 
@@ -35,15 +35,15 @@ python3 server.py
 
 ## 🌟 Features Built For Your Calling Workflow
 
-1. **34 Pinned Calgary Clinics**:
-   - NW: 9 clinics
-   - NE: 8 clinics
-   - SW: 9 clinics
-   - SE: 8 clinics
+1. **33 Pinned Calgary Clinics**:
+   - NW: 6 clinics
+   - NE: 9 clinics
+   - SW: 8 clinics
+   - SE: 10 clinics
 2. **Direct Phone Links**:
    - Each clinic card and the slide-out bar display the clinic's phone number with a 1-click **"Call Clinic"** button (`tel:`).
 3. **Outreach Status Tracking**:
-   - 📞 **To Call / Not Contacted** (Default state for all 34 clinics)
+   - 📞 **To Call / Not Contacted** (Default state for all 33 clinics)
    - 💬 **In Talks / Follow Up Needed**
    - ⭐ **Interested in Using App**
    - 🟢 **Using My App (Customer)**
