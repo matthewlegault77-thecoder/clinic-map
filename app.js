@@ -117,6 +117,7 @@
         try { localStorage.removeItem(k); } catch(e) {}
       });
 
+      const SEEN_KEY = STORAGE_KEY + '_seen_ids';
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
         clinics = JSON.parse(stored);
@@ -132,11 +133,19 @@
             if (!c[f] || c[f] === prev[f]) c[f] = init[f];
           });
         });
+        // Add dataset clinics this browser hasn't received yet; one the user deleted is never re-added.
+        // Browsers saved before this tracking existed had received only the original ids (nw-01..se-10).
+        const seen = JSON.parse(localStorage.getItem(SEEN_KEY) || 'null') ||
+          INITIAL_CLINICS.map(c => c.id).filter(id => /^(nw|ne|sw|se)-(0[1-9]|10)$/.test(id));
+        INITIAL_CLINICS.forEach(init => {
+          if (!seen.includes(init.id) && !clinics.some(c => c.id === init.id)) clinics.push(JSON.parse(JSON.stringify(init)));
+        });
         saveData();
       } else {
         clinics = getInitialClinics();
         saveData();
       }
+      localStorage.setItem(SEEN_KEY, JSON.stringify(INITIAL_CLINICS.map(c => c.id)));
     } catch (e) {
       console.warn('Failed to load from localStorage, fallback to initial dataset', e);
       clinics = getInitialClinics();
@@ -915,6 +924,9 @@
         if (Array.isArray(imported) && imported.length > 0) {
           clinics = imported;
           saveData();
+          // Treat the backup like an older saved list: apply data corrections and add clinics it predates
+          localStorage.removeItem(STORAGE_KEY + '_seen_ids');
+          loadData();
           updateUI();
           closeExportImportModal();
           showToast(`Imported ${imported.length} clinics successfully!`, 'success');
